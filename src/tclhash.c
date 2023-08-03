@@ -9,7 +9,7 @@
  */
 /*
  * Copyright (C) 1997 Robey Pointer
- * Copyright (C) 1999 - 2022 Eggheads Development Team
+ * Copyright (C) 1999 - 2023 Eggheads Development Team
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -935,7 +935,7 @@ int check_tcl_bind(tcl_bind_list_t *tl, const char *match,
   if (tm_p && tm_p->next) {
     tm = tm_p->next;            /* Move mask to front of bind's mask list. */
     tm_p->next = tm->next;      /* Unlink mask from list. */
-    tm->next = tl->first;       /* Readd mask to front of list. */
+    tm->next = tl->first;       /* Re-add mask to front of list. */
     tl->first = tm;
   }
 
@@ -1316,6 +1316,10 @@ void tell_binds(int idx, char *par)
           continue;
         proc = tc->func_name;
         build_flags(flg, &(tc->flags), NULL);
+        if (!strcmp(flg, "-|-")) {
+          flg[0] = '*';
+          flg[1] = '\0';
+        }
         if (showall || proc[0] != '*') {
           int ok = 0;
 
